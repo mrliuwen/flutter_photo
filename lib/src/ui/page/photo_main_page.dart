@@ -154,18 +154,14 @@ class _PhotoMainPageState extends State<PhotoMainPage>
 
   void _refreshList() async {
     var pathList = await PhotoManager.getAssetPathList();
-
     options.sortDelegate.sort(pathList);
-
     galleryPathList.clear();
-
-    if(themeColor.toString()=="0xfffffff9"){
+    var imageList = await currentPath.assetList;
+    if(themeColor.toString()=="Color(0xfffffff9)"){
       this.list.addAll(imageList);
     }else{
       this.list.addAll(imageList.reversed);
     }
-
-    var imageList = await currentPath.assetList;
     this.list.clear();
     this.list.addAll(imageList);
     setState(() {
