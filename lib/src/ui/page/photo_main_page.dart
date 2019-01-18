@@ -158,7 +158,12 @@ class _PhotoMainPageState extends State<PhotoMainPage>
     options.sortDelegate.sort(pathList);
 
     galleryPathList.clear();
-    galleryPathList.addAll(pathList);
+
+    if(themeColor.toString()=="0xfffffff9"){
+      this.list.addAll(imageList);
+    }else{
+      this.list.addAll(imageList.reversed);
+    }
 
     var imageList = await currentPath.assetList;
     this.list.clear();
