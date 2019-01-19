@@ -103,6 +103,7 @@ class PhotoPicker {
     Color textColor,
     Color disableColor,
     int thumbSize = 64,
+    bool hasVideo=false,
     I18nProvider provider = I18nProvider.chinese,
     SortDelegate sortDelegate,
     CheckBoxBuilderDelegate checkBoxBuilderDelegate,
@@ -116,7 +117,6 @@ class PhotoPicker {
     dividerColor ??= Theme.of(context)?.dividerColor ?? Colors.grey;
     disableColor ??= Theme.of(context)?.disabledColor ?? Colors.grey;
     textColor ??= Colors.white;
-
     sortDelegate ??= SortDelegate.common;
     checkBoxBuilderDelegate ??= DefaultCheckBoxBuilderDelegate();
 
@@ -142,6 +142,7 @@ class PhotoPicker {
       context,
       options,
       provider,
+      hasVideo,
     );
   }
 
@@ -149,6 +150,7 @@ class PhotoPicker {
     BuildContext context,
     Options options,
     I18nProvider provider,
+      bool hasVideo,
   ) async {
     var requestPermission = await PhotoManager.requestPermission();
     if (requestPermission != true) {
@@ -164,16 +166,17 @@ class PhotoPicker {
       return null;
     }
 
-    return _openGalleryContentPage(context, options, provider);
+    return _openGalleryContentPage(context, options, provider,hasVideo);
   }
 
   Future<List<AssetEntity>> _openGalleryContentPage(
-      BuildContext context, Options options, I18nProvider provider) async {
+      BuildContext context, Options options, I18nProvider provider,bool hasVideo) async {
     return Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => PhotoApp(
               options: options,
               provider: provider,
+              hasVideo: hasVideo,
             ),
       ),
     );

@@ -34,9 +34,8 @@ class _MyHomePageState extends State<MyHomePage> with LoadingDelegate {
     List<AssetEntity> imgList = await PhotoPicker.pickAsset(
       // BuildContext required
       context: context,
-
-      /// The following are optional parameters.
       themeColor: Colors.green,
+      hasVideo: false,
       // the title color and bottom color
       padding: 1.0,
       // item padding

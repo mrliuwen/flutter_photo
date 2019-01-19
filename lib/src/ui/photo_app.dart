@@ -8,8 +8,8 @@ import 'package:photo_manager/photo_manager.dart';
 class PhotoApp extends StatelessWidget {
   final Options options;
   final I18nProvider provider;
-
-  const PhotoApp({Key key, this.options, this.provider}) : super(key: key);
+  final bool hasVideo;
+  const PhotoApp({Key key, this.options, this.provider,this.hasVideo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +17,7 @@ class PhotoApp extends StatelessWidget {
       provider: provider,
       options: options,
       child: PhotoMainPage(
+        hasVideo:hasVideo,
         onClose: (List<AssetEntity> value) {
           Navigator.pop(context, value);
         },

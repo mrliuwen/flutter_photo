@@ -15,10 +15,10 @@ import 'package:photo_manager/photo_manager.dart';
 
 class PhotoMainPage extends StatefulWidget {
   final ValueChanged<List<AssetEntity>> onClose;
-
+  final bool hasVideo;
   const PhotoMainPage({
     Key key,
-    this.onClose,
+    this.onClose, this.hasVideo,
   }) : super(key: key);
 
   @override
@@ -106,7 +106,7 @@ class _PhotoMainPageState extends State<PhotoMainPage>
             key: scaffoldKey,
             provider: i18nProvider,
             options: options,
-            galleryName: currentPath.name,
+            galleryName: "sdasadsdasdd",
             onGalleryChange: _onGalleryChange,
             onTapPreview: selectedList.isEmpty ? null : _onTapPreview,
             selectedProvider: this,
@@ -139,21 +139,24 @@ class _PhotoMainPageState extends State<PhotoMainPage>
     }
     Scaffold.of(scaffoldKey.currentContext).showSnackBar(
       SnackBar(
-        content: Text(
-          msg,
-          style: TextStyle(
-            color: options.textColor,
-            fontSize: 14.0,
-          ),
+        content: Container(
+          height: 30,
+          alignment: AlignmentDirectional.center,
+         child:  Text(
+           msg,
+           style: TextStyle(
+             color: options.textColor,
+             fontSize: 14.0,
+           ),
+         ),
         ),
         duration: Duration(milliseconds: 1500),
         backgroundColor: themeColor.withOpacity(0.7),
       ),
     );
   }
-
   void _refreshList() async {
-    var pathList = await PhotoManager.getAssetPathList();
+    var pathList = await PhotoManager.getAssetPathList(hasVideo:widget.hasVideo);
     options.sortDelegate.sort(pathList);
     galleryPathList.clear();
     var imageList = await currentPath.assetList;
@@ -432,25 +435,12 @@ class __BottomWidgetState extends State<_BottomWidget> {
         bottom: true,
         top: false,
         child: Container(
+
           height: 52.0,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              FlatButton(
-                onPressed: _showGallerySelectDialog,
-                splashColor: Colors.transparent,
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 44.0,
-                  padding: textPadding,
-                  child: Text(
-                    widget.galleryName,
-                    style: textStyle.copyWith(color: options.textColor),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(),
-              ),
               FlatButton(
                 onPressed: widget.onTapPreview,
                 textColor: options.textColor,
