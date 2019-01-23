@@ -469,7 +469,7 @@ class __BottomWidgetState extends State<_BottomWidget> {
                   child: Text(
                     i18nProvider.getPreviewText(
                         options, widget.selectedProvider),
-                    style: widget.selectedCount == 0
+                    style: widget.selectedCount != 0
                         ? textStyle.copyWith(color:options.disableColor)
                         : textStyle.copyWith(color:Color(0xfff0f0f0) ),
                   ),
@@ -483,7 +483,7 @@ class __BottomWidgetState extends State<_BottomWidget> {
                 splashColor: Colors.transparent,
                 child: Text(
                   i18nProvider.getSureText(options, widget.selectedCount),
-                  style: widget.selectedCount == 0
+                  style: widget.selectedCount != 0
                       ? textStyle.copyWith(color:options.disableColor)
                       : textStyle.copyWith(color:Color(0xfff0f0f0) ),
                 ),
