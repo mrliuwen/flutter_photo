@@ -471,7 +471,7 @@ class __BottomWidgetState extends State<_BottomWidget> {
                         options, widget.selectedProvider),
                     style: widget.selectedCount != 0
                         ? textStyle.copyWith(color:options.disableColor)
-                        : textStyle.copyWith(color:Color(0xfff0f0f0) ),
+                        : textStyle.copyWith(color:Color(0xffd9d9d9) ),
                   ),
                   padding: textPadding,
                 ),
@@ -485,7 +485,7 @@ class __BottomWidgetState extends State<_BottomWidget> {
                   i18nProvider.getSureText(options, widget.selectedCount),
                   style: widget.selectedCount != 0
                       ? textStyle.copyWith(color:options.disableColor)
-                      : textStyle.copyWith(color:Color(0xfff0f0f0) ),
+                      : textStyle.copyWith(color:Color(0xffd9d9d9) ),
                 ),
                 onPressed: widget.selectedCount == 0 ? null : sure,
               ),
