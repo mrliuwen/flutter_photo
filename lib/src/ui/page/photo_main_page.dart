@@ -16,9 +16,11 @@ import 'package:photo_manager/photo_manager.dart';
 class PhotoMainPage extends StatefulWidget {
   final ValueChanged<List<AssetEntity>> onClose;
   final bool hasVideo;
+
   const PhotoMainPage({
     Key key,
-    this.onClose, this.hasVideo,
+    this.onClose,
+    this.hasVideo,
   }) : super(key: key);
 
   @override
@@ -88,25 +90,17 @@ class _PhotoMainPageState extends State<PhotoMainPage>
             title: Text(
               i18nProvider.getTitleText(options),
             ),
-            actions: <Widget>[
-              FlatButton(
-                splashColor: Colors.transparent,
-                child: Text(
-                  i18nProvider.getSureText(options, selectedCount),
-                  style: selectedCount == 0
-                      ? textStyle.copyWith(color: options.disableColor)
-                      : textStyle,
-                ),
-                onPressed: selectedCount == 0 ? null : sure,
-              ),
-            ],
+            actions: <Widget>[],
           ),
           body: _buildBody(),
           bottomNavigationBar: _BottomWidget(
             key: scaffoldKey,
             provider: i18nProvider,
             options: options,
-            galleryName: "sdasadsdasdd",
+            onClose: widget.onClose,
+            selectedList:selectedList,
+            selectedCount: selectedCount,
+            galleryName: "全部",
             onGalleryChange: _onGalleryChange,
             onTapPreview: selectedList.isEmpty ? null : _onTapPreview,
             selectedProvider: this,
@@ -129,10 +123,6 @@ class _PhotoMainPageState extends State<PhotoMainPage>
     return result;
   }
 
-  void sure() {
-    widget.onClose?.call(selectedList);
-  }
-
   void _showTip(String msg) {
     if (isPushed) {
       return;
@@ -142,28 +132,30 @@ class _PhotoMainPageState extends State<PhotoMainPage>
         content: Container(
           height: 30,
           alignment: AlignmentDirectional.center,
-         child:  Text(
-           msg,
-           style: TextStyle(
-             color: options.textColor,
-             fontSize: 14.0,
-           ),
-         ),
+          child: Text(
+            msg,
+            style: TextStyle(
+              color: options.textColor,
+              fontSize: 14.0,
+            ),
+          ),
         ),
         duration: Duration(milliseconds: 1500),
         backgroundColor: themeColor.withOpacity(0.7),
       ),
     );
   }
+
   void _refreshList() async {
-    var pathList = await PhotoManager.getAssetPathList(hasVideo:widget.hasVideo);
+    var pathList =
+        await PhotoManager.getAssetPathList(hasVideo: widget.hasVideo);
     options.sortDelegate.sort(pathList);
     galleryPathList.clear();
     var imageList = await currentPath.assetList;
     this.list.clear();
-    if(themeColor.toString()=="Color(0xfffffff9)"){
+    if (themeColor.toString() == "Color(0xfffffff9)") {
       this.list.addAll(imageList);
-    }else{
+    } else {
       this.list.addAll(imageList.reversed);
     }
     setState(() {
@@ -389,6 +381,11 @@ class _PhotoMainPageState extends State<PhotoMainPage>
       ),
     );
   }
+
+  @override
+  void sure() {
+    // TODO: implement sure
+  }
 }
 
 class _BottomWidget extends StatefulWidget {
@@ -404,6 +401,11 @@ class _BottomWidget extends StatefulWidget {
 
   final GalleryListProvider galleryListProvider;
   final VoidCallback onTapPreview;
+  final int selectedCount;
+
+  final List<AssetEntity> selectedList;
+
+  final ValueChanged<List<AssetEntity>> onClose;
 
   const _BottomWidget({
     Key key,
@@ -414,6 +416,9 @@ class _BottomWidget extends StatefulWidget {
     this.galleryName = "",
     this.galleryListProvider,
     this.onTapPreview,
+    this.selectedCount,
+    this.selectedList,
+    this.onClose,
   }) : super(key: key);
 
   @override
@@ -435,12 +440,24 @@ class __BottomWidgetState extends State<_BottomWidget> {
         bottom: true,
         top: false,
         child: Container(
-
           height: 52.0,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
+              /*  FlatButton(
+                onPressed: _showGallerySelectDialog,
+                splashColor: Colors.transparent,
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 44.0,
+                  padding: textPadding,
+                  child: Text(
+                    widget.galleryName,
+                    style: textStyle.copyWith(color: options.textColor),
+                  ),
+                ),
+              ),*/
               FlatButton(
                 onPressed: widget.onTapPreview,
                 textColor: options.textColor,
@@ -457,11 +474,28 @@ class __BottomWidgetState extends State<_BottomWidget> {
                   padding: textPadding,
                 ),
               ),
+              Expanded(
+                child: Container(),
+              ),
+              FlatButton(
+                splashColor: Colors.transparent,
+                child: Text(
+                  i18nProvider.getSureText(options, widget.selectedCount),
+                  style: widget.selectedCount == 0
+                      ? textStyle.copyWith(color: options.disableColor)
+                      : textStyle,
+                ),
+                onPressed: widget.selectedCount == 0 ? null : sure,
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void sure() {
+    widget.onClose?.call(widget.selectedList);
   }
 
   void _showGallerySelectDialog() async {
